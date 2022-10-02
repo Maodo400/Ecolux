@@ -7,10 +7,16 @@ const CustomButton = ({
   type = "PRIMARY",
   bgColor,
   fgColor,
+  disabled,
+  onPressOut,
+  onPressIn
 }) => {
   return (
     <Pressable
+    disabled={disabled}
       onPress={onPress}
+      onPressOut={onPressOut}
+      onPressIn={onPressIn}
       style={[
         styles.container,
         styles[`container_${type}`],
@@ -32,13 +38,15 @@ const CustomButton = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: "30%",
+    width: "25%",
 
     padding: 5,
     marginVertical: 5,
 
     alignItems: "center",
     borderRadius: 5,
+
+    justifyContent: "center"
   },
 
   container_PRIMARY: {
@@ -53,7 +61,7 @@ const styles = StyleSheet.create({
   container_TERTIARY: {},
 
   text: {
-    fontWeight: "bold",
+    fontWeight: "500",
     color: "white",
   },
 

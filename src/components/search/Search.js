@@ -1,64 +1,52 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, StyleSheet, Button, Keyboard } from "react-native";
+import React, { useState } from "react";
 import CustomInput from "../customInput/CustomInput";
 import CustomButton from "../customButton/CustomButton";
-import { useForm } from "react-hook-form";
-import { API_SERVER } from "../../../assets/constants";
+import { Feather, Entypo } from "@expo/vector-icons";
 
-const Search = () => {
-  const { control, handleSubmit, watch } = useForm();
-
-  const onSearch = (data) => {
-    fetch(API_SERVER + "/livres?nom="+data.Rechercher)
-      .then((res) => res.json())
-      .then((resJson) => {
-        console.log(resJson);
-        setData(resJson);
-      })
-      .catch(console.error)
-      .finally(() => setIsloading(false));
-  };
-
-  const onSearch1 = async (data) => {
-    console.log(data);
-    await fetch(API_SERVER+'/livres?nom='+data.Rechercher, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    console.warn("Register pressed");
-  };
-
+const Search = ({ onSearch, search, setSearch }) => {
   return (
-    <View>
-      <Text style={styles.title}>LISTE DES POSTS</Text>
-      <View style={styles.search}>
-        <CustomInput
-          name="Rechercher"
-          placeholder="Rechercher"
-          control={control}
-          onChangeText={(value) => onChangeTitle(value)}
-          rules={{}}
-          style={styles.searchInput}
+    <View style={styles.search}>
+      <CustomInput
+        placeholder="Rechercher"
+        value={search}
+        onChange={setSearch}
+        style={styles.searchInput}
+      />
+      {!search == "" ? (
+        <Entypo
+          name="cross"
+          size={20}
+          color="blue"
+          style={{ padding: 1, alignSelf: "center" }}
+          onPress={() => {
+            setSearch("");
+          }}
         />
-        <CustomButton
-          text="Rechercher"
-          onPress={handleSubmit(onSearch)}
-          type="PRIMARY"
-          style={styles.searchButton}
-        />
-      </View>
+      ) : null}
+
+      <CustomButton text="Rechercher" onPress={onSearch} type="PRIMARY" />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
+  feather: {
+    marginLeft: 1,
+    alignSelf: "center",
+  },
   search: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 10
+    marginLeft: 20,
+    marginRight: 20,
+    shadowColor: "black",
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    marginBottom: 5,
+    borderRadius: 10,
+    paddingRight: 5,
+    paddingLeft: 5,
   },
   title: {
     fontSize: 24,
@@ -66,12 +54,6 @@ const styles = StyleSheet.create({
     color: "#051C60",
     margin: 10,
     alignSelf: "center",
-  },
-  searchButton: {
-    width: 150
-  },
-  searchInput: {
-
   },
 });
 
